@@ -1,6 +1,8 @@
 package org.jeecg.modules.monitor.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.modules.monitor.domain.RedisInfo;
@@ -18,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Api(tags="REDIS追踪器")
 @Slf4j
 @RestController
 @RequestMapping("/sys/actuator/redis")
@@ -32,13 +34,14 @@ public class ActuatorRedisController {
      * @return
      * @throws Exception
      */
+	@ApiOperation("Redis详细信息")
     @GetMapping("/info")
     public Result<?> getRedisInfo() throws Exception {
         List<RedisInfo> infoList = this.redisService.getRedisInfo();
         log.info(infoList.toString());
         return Result.ok(infoList);
     }
-
+	@ApiOperation("获取key数量")
     @GetMapping("/keysSize")
     public Map<String, Object> getKeysSize() throws Exception {
         return redisService.getKeysSize();
@@ -49,6 +52,7 @@ public class ActuatorRedisController {
      * @return
      * @throws Exception
      */
+    @ApiOperation("获取报表需要的redis中key的数量")
     @GetMapping("/keysSizeForReport")
     public Map<String, JSONArray> getKeysSizeReport() throws Exception {
 		return redisService.getMapForReport("1");
@@ -59,6 +63,7 @@ public class ActuatorRedisController {
      * @return
      * @throws Exception
      */
+    @ApiOperation("获取报表需要的redis占用内存")
     @GetMapping("/memoryForReport")
     public Map<String, JSONArray> memoryForReport() throws Exception {
 		return redisService.getMapForReport("2");
@@ -68,11 +73,12 @@ public class ActuatorRedisController {
      * @return
      * @throws Exception
      */
+    @ApiOperation("获取报表需要的redis信息")
     @GetMapping("/infoForReport")
     public Map<String, JSONArray> infoForReport() throws Exception {
 		return redisService.getMapForReport("3");
     }
-
+	@ApiOperation("获取redis内存信息")
     @GetMapping("/memoryInfo")
     public Map<String, Object> getMemoryInfo() throws Exception {
         return redisService.getMemoryInfo();
@@ -85,6 +91,7 @@ public class ActuatorRedisController {
   	 * @param response
   	 * @return
   	 */
+  	@ApiOperation("获取磁盘信息")
   	@GetMapping("/queryDiskInfo")
   	public Result<List<Map<String,Object>>> queryDiskInfo(HttpServletRequest request, HttpServletResponse response){
   		Result<List<Map<String,Object>>> res = new Result<>();

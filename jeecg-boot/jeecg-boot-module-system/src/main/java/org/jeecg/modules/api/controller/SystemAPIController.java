@@ -1,6 +1,9 @@
 package org.jeecg.modules.api.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.checkerframework.checker.units.qual.A;
 import org.jeecg.common.api.dto.message.*;
 import org.jeecg.common.api.dto.OnlineAuthDTO;
 import org.jeecg.common.system.api.ISysBaseAPI;
@@ -17,6 +20,7 @@ import java.util.Set;
 /**
  * 服务化 system模块 对外接口请求类
  */
+@Api(tags="底层Api接口")
 @RestController
 @RequestMapping("/sys/api")
 public class SystemAPIController {
@@ -32,7 +36,9 @@ public class SystemAPIController {
      * 发送系统消息
      * @param message 使用构造器赋值参数 如果不设置category(消息类型)则默认为2 发送系统消息
      */
+
     @PostMapping("/sendSysAnnouncement")
+    @ApiOperation("发送系统信息，如不设置category(消息类型)则默认为2 发送系统消息")
     public void sendSysAnnouncement(@RequestBody MessageDTO message){
         sysBaseAPI.sendSysAnnouncement(message);
     }
@@ -41,6 +47,7 @@ public class SystemAPIController {
      * 发送消息 附带业务参数
      * @param message 使用构造器赋值参数
      */
+    @ApiOperation("发送消息 附带业务参数")
     @PostMapping("/sendBusAnnouncement")
     public void sendBusAnnouncement(@RequestBody BusMessageDTO message){
         sysBaseAPI.sendBusAnnouncement(message);
@@ -50,6 +57,7 @@ public class SystemAPIController {
      * 通过模板发送消息
      * @param message 使用构造器赋值参数
      */
+    @ApiOperation("通过模板发送消息")
     @PostMapping("/sendTemplateAnnouncement")
     public void sendTemplateAnnouncement(@RequestBody TemplateMessageDTO message){
         sysBaseAPI.sendTemplateAnnouncement(message);
@@ -59,6 +67,7 @@ public class SystemAPIController {
      * 通过模板发送消息 附带业务参数
      * @param message 使用构造器赋值参数
      */
+    @ApiOperation("通过模板发送消息 附带业务参数")
     @PostMapping("/sendBusTemplateAnnouncement")
     public void sendBusTemplateAnnouncement(@RequestBody BusTemplateMessageDTO message){
         sysBaseAPI.sendBusTemplateAnnouncement(message);
@@ -69,6 +78,7 @@ public class SystemAPIController {
      * @param templateDTO 使用构造器赋值参数
      * @return
      */
+    @ApiOperation("通过消息中心模板，生成推送内容")
     @PostMapping("/parseTemplateByCode")
     public String parseTemplateByCode(@RequestBody TemplateDTO templateDTO){
         return sysBaseAPI.parseTemplateByCode(templateDTO);
@@ -77,6 +87,7 @@ public class SystemAPIController {
     /**
      * 根据业务类型busType及业务busId修改消息已读
      */
+    @ApiOperation("根据业务类型busType及业务busId修改消息已读")
     @GetMapping("/updateSysAnnounReadFlag")
     public void updateSysAnnounReadFlag(@RequestParam("busType") String busType, @RequestParam("busId")String busId){
         sysBaseAPI.updateSysAnnounReadFlag(busType, busId);
@@ -87,6 +98,7 @@ public class SystemAPIController {
      * @param username
      * @return
      */
+    @ApiOperation("根据用户账号查询用户信息")
     @GetMapping("/getUserByName")
     public LoginUser getUserByName(@RequestParam("username") String username){
         return sysBaseAPI.getUserByName(username);
@@ -97,6 +109,7 @@ public class SystemAPIController {
      * @param id
      * @return
      */
+    @ApiOperation("根据用户id查询用户信息")
     @GetMapping("/getUserById")
     LoginUser getUserById(@RequestParam("id") String id){
         return sysBaseAPI.getUserById(id);
@@ -107,6 +120,7 @@ public class SystemAPIController {
      * @param username
      * @return
      */
+    @ApiOperation("通过用户账号查询角色集合")
     @GetMapping("/getRolesByUsername")
     List<String> getRolesByUsername(@RequestParam("username") String username){
         return sysBaseAPI.getRolesByUsername(username);
@@ -117,6 +131,7 @@ public class SystemAPIController {
      * @param username
      * @return 部门 id
      */
+    @ApiOperation("通过用户账号查询部门集合")
     @GetMapping("/getDepartIdsByUsername")
     List<String> getDepartIdsByUsername(@RequestParam("username") String username){
         return sysBaseAPI.getDepartIdsByUsername(username);
@@ -127,6 +142,7 @@ public class SystemAPIController {
      * @param username
      * @return 部门 name
      */
+    @ApiOperation("通过用户账号查询部门")
     @GetMapping("/getDepartNamesByUsername")
     List<String> getDepartNamesByUsername(@RequestParam("username") String username){
         return sysBaseAPI.getDepartNamesByUsername(username);
@@ -138,12 +154,14 @@ public class SystemAPIController {
      * @param code
      * @return
      */
+    @ApiOperation("获取数据字典")
     @GetMapping("/queryDictItemsByCode")
     List<DictModel> queryDictItemsByCode(@RequestParam("code") String code){
         return sysBaseAPI.queryDictItemsByCode(code);
     }
 
     /** 查询所有的父级字典，按照create_time排序 */
+    @ApiOperation("查询所有的父级字典，按照create_time排序")
     @GetMapping("/queryAllDict")
     List<DictModel> queryAllDict(){
         return sysBaseAPI.queryAllDict();
@@ -153,6 +171,7 @@ public class SystemAPIController {
      * 查询所有分类字典
      * @return
      */
+    @ApiOperation("查询所有分类字典")
     @GetMapping("/queryAllDSysCategory")
     List<SysCategoryModel> queryAllDSysCategory(){
         return sysBaseAPI.queryAllDSysCategory();
@@ -165,6 +184,7 @@ public class SystemAPIController {
      * @param code
      * @return
      */
+    @ApiOperation("获取表数据字典")
     @GetMapping("/queryTableDictItemsByCode")
     List<DictModel> queryTableDictItemsByCode(@RequestParam("table") String table, @RequestParam("text") String text, @RequestParam("code") String code){
         return sysBaseAPI.queryTableDictItemsByCode(table, text, code);
@@ -174,6 +194,7 @@ public class SystemAPIController {
      * 查询所有部门 作为字典信息 id -->value,departName -->text
      * @return
      */
+    @ApiOperation("查询所有部门 作为字典信息")
     @GetMapping("/queryAllDepartBackDictModel")
     List<DictModel> queryAllDepartBackDictModel(){
         return sysBaseAPI.queryAllDepartBackDictModel();
@@ -188,6 +209,7 @@ public class SystemAPIController {
      * @param filterSql
      * @return
      */
+    @ApiOperation("查询表字典")
     @GetMapping("/queryFilterTableDictInfo")
     List<DictModel> queryFilterTableDictInfo(@RequestParam("table") String table, @RequestParam("text") String text, @RequestParam("code") String code, @RequestParam("filterSql") String filterSql){
         return sysBaseAPI.queryFilterTableDictInfo(table, text, code, filterSql);
@@ -201,6 +223,7 @@ public class SystemAPIController {
      * @param keyArray
      * @return
      */
+    @ApiOperation("查询指定table的 text code 获取字典，包含text和value")
     @Deprecated
     @GetMapping("/queryTableDictByKeys")
     public List<String> queryTableDictByKeys(@RequestParam("table") String table, @RequestParam("text") String text, @RequestParam("code") String code, @RequestParam("keyArray") String[] keyArray){
@@ -212,6 +235,7 @@ public class SystemAPIController {
      * roleIds 默认选中角色
      * @return
      */
+    @ApiOperation("获取所有角色 带参")
     @GetMapping("/queryAllRole")
     public List<ComboModel> queryAllRole(@RequestParam(name = "roleIds",required = false)String[] roleIds){
         if(roleIds==null || roleIds.length==0){
@@ -226,6 +250,7 @@ public class SystemAPIController {
      * @param username
      * @return
      */
+    @ApiOperation("通过用户账号查询角色Id集合")
     @GetMapping("/getRoleIdsByUsername")
     public List<String> getRoleIdsByUsername(@RequestParam("username")String username){
         return sysBaseAPI.getRoleIdsByUsername(username);
@@ -236,6 +261,7 @@ public class SystemAPIController {
      * @param orgCode
      * @return
      */
+    @ApiOperation("通过部门编号查询部门id")
     @GetMapping("/getDepartIdsByOrgCode")
     public String getDepartIdsByOrgCode(@RequestParam("orgCode")String orgCode){
         return sysBaseAPI.getDepartIdsByOrgCode(orgCode);
@@ -245,6 +271,7 @@ public class SystemAPIController {
      * 查询所有部门
      * @return
      */
+    @ApiOperation("查询所有部门")
     @GetMapping("/getAllSysDepart")
     public List<SysDepartModel> getAllSysDepart(){
         return sysBaseAPI.getAllSysDepart();
@@ -256,6 +283,7 @@ public class SystemAPIController {
      * @param dbSourceId
      * @return
      */
+    @ApiOperation("根据 id 查询数据库中存储的 DynamicDataSourceModel")
     @GetMapping("/getDynamicDbSourceById")
     DynamicDataSourceModel getDynamicDbSourceById(@RequestParam("dbSourceId")String dbSourceId){
         return sysBaseAPI.getDynamicDbSourceById(dbSourceId);
@@ -268,6 +296,7 @@ public class SystemAPIController {
      * @param deptId
      * @return
      */
+    @ApiOperation("根据部门Id获取部门负责人")
     @GetMapping("/getDeptHeadByDepId")
     public List<String> getDeptHeadByDepId(@RequestParam("deptId") String deptId){
         return sysBaseAPI.getDeptHeadByDepId(deptId);
@@ -278,6 +307,7 @@ public class SystemAPIController {
      * @param departId
      * @return
      */
+    @ApiOperation("查找父级部门")
     @GetMapping("/getParentDepartId")
     public DictModel getParentDepartId(@RequestParam("departId")String departId){
         return sysBaseAPI.getParentDepartId(departId);

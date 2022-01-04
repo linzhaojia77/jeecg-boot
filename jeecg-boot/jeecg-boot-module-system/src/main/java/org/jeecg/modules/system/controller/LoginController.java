@@ -234,6 +234,7 @@ public class LoginController {
 	 * @param jsonObject
 	 * @return
 	 */
+	@ApiOperation("手机号注册接口")
 	@PostMapping(value = "/sms")
 	public Result<String> sms(@RequestBody JSONObject jsonObject) {
 		Result<String> result = new Result<String>();
@@ -267,7 +268,8 @@ public class LoginController {
 					baseCommonService.addLog("手机号已经注册，请直接登录！", CommonConstant.LOG_TYPE_1, null);
 					return result;
 				}
-				b = DySmsHelper.sendSms(mobile, obj, DySmsEnum.REGISTER_TEMPLATE_CODE);
+//				b = DySmsHelper.sendSms(mobile, obj, DySmsEnum.REGISTER_TEMPLATE_CODE);
+				b = true;
 			}else {
 				//登录模式，校验用户有效性
 				SysUser sysUser = sysUserService.getUserByPhone(mobile);
@@ -298,7 +300,7 @@ public class LoginController {
 				return result;
 			}
 			//验证码10分钟内有效
-			redisUtil.set(mobile, captcha, 600);
+			redisUtil.set(mobile, captcha, 6000);
 			//update-begin--Author:scott  Date:20190812 for：issues#391
 			//result.setResult(captcha);
 			//update-end--Author:scott  Date:20190812 for：issues#391

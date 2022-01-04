@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.Random;
@@ -76,7 +77,7 @@ public class RandImageUtil {
         base64 = base64.replaceAll("\n", "").replaceAll("\r", "");//删除 \r\n
 
         //写到指定位置
-        //ImageIO.write(bufferedImage, "png", new File(""));
+//        ImageIO.write(image, "png", new File("C:\\Users\\lzs\\Desktop\\newcode.png"));
 
         return BASE64_PRE+base64;
     }

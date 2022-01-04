@@ -142,7 +142,6 @@ public interface ISysBaseAPI extends CommonAPI {
      */
     @GetMapping("/sys/api/updateSysAnnounReadFlag")
     public void updateSysAnnounReadFlag(@RequestParam("busType") String busType, @RequestParam("busId")String busId);
-
     /**
      * 16查询表字典 支持过滤数据
      * @param table

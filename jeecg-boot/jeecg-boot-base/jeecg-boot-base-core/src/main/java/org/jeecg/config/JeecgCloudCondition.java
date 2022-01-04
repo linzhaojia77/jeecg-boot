@@ -17,6 +17,7 @@ public class JeecgCloudCondition implements Condition {
         if(object==null){
             return false;
         }
+
         return true;
     }
 }

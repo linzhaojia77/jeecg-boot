@@ -71,6 +71,7 @@ public class QuartzJobController {
 	 * @return
 	 */
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@ApiOperation(value = "查看定时任务")
 	public Result<?> queryPageList(QuartzJob quartzJob, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
 			@RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
 		QueryWrapper<QuartzJob> queryWrapper = QueryGenerator.initQueryWrapper(quartzJob, req.getParameterMap());

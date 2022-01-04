@@ -4,7 +4,7 @@
   <artifactId>jeecg-boot-parent</artifactId>
   <version>2.4.3</version>
   <packaging>pom</packaging>
-  
+  <!--github-test-->
   	<parent>
 	    <groupId>org.springframework.boot</groupId>
 	    <artifactId>spring-boot-starter-parent</artifactId>
@@ -51,10 +51,9 @@
         <module>jeecg-boot-base</module>
         <module>jeecg-boot-module-demo</module>
         <module>jeecg-boot-module-system</module>
-
-       <!-- 需要微服务，请打开注释
-       <module>jeecg-boot-starter</module>
-        <module>jeecg-cloud-module</module>-->
+<!--		需要微服务，请打开注释-->
+<!--       <module>jeecg-boot-starter</module>-->
+<!--        <module>jeecg-cloud-module</module>-->
 	</modules>
 
 	<distributionManagement>
@@ -70,22 +69,30 @@
 		</snapshotRepository>
 	</distributionManagement>
 	<repositories>
+<!--		<repository>-->
+<!--            <id>aliyun</id>-->
+<!--            <name>aliyun Repository</name>-->
+<!--            <url>http://maven.aliyun.com/nexus/content/groups/public</url>-->
+<!--            <snapshots>-->
+<!--				<enabled>false</enabled>-->
+<!--			</snapshots>-->
+<!--        </repository>-->
 		<repository>
-            <id>aliyun</id>
-            <name>aliyun Repository</name>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-            <snapshots>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/libs-milestone</url>
+			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
-        </repository>
-		<repository>
-            <id>jeecg</id>
-            <name>jeecg Repository</name>
-            <url>http://maven.jeecg.org/nexus/content/repositories/jeecg</url>
-            <snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-        </repository>
+		</repository>
+<!--		<repository>-->
+<!--            <id>jeecg</id>-->
+<!--            <name>jeecg Repository</name>-->
+<!--            <url>http://maven.jeecg.org/nexus/content/repositories/jeecg</url>-->
+<!--            <snapshots>-->
+<!--				<enabled>false</enabled>-->
+<!--			</snapshots>-->
+<!--        </repository>-->
 	</repositories>
 
 	<dependencies>
