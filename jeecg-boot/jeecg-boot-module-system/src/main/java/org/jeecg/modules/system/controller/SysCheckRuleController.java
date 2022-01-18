@@ -166,7 +166,8 @@ public class SysCheckRuleController extends JeecgController<SysCheckRule, ISysCh
      * @param request
      * @param sysCheckRule
      */
-    @RequestMapping(value = "/exportXls")
+    @ApiOperation("导出excel")
+    @GetMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, SysCheckRule sysCheckRule) {
         return super.exportXls(request, sysCheckRule, SysCheckRule.class, "编码校验规则");
     }

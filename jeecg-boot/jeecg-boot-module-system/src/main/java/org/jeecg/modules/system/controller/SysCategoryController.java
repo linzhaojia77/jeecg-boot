@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -42,6 +44,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/sys/category")
 @Slf4j
+@Api(tags="产品分类")
 public class SysCategoryController {
 	@Autowired
 	private ISysCategoryService sysCategoryService;
@@ -54,6 +57,7 @@ public class SysCategoryController {
 	 * @param req
 	 * @return
 	 */
+	@ApiOperation("查看产品父类型")
 	@GetMapping(value = "/rootList")
 	public Result<IPage<SysCategory>> queryPageList(SysCategory sysCategory,
 									  @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -76,11 +80,12 @@ public class SysCategoryController {
 		result.setResult(pageList);
 		return result;
 	}
-	
+	@ApiOperation("查看所有产品")
 	@GetMapping(value = "/childList")
 	public Result<List<SysCategory>> queryPageList(SysCategory sysCategory,HttpServletRequest req) {
 		Result<List<SysCategory>> result = new Result<List<SysCategory>>();
-		QueryWrapper<SysCategory> queryWrapper = QueryGenerator.initQueryWrapper(sysCategory, req.getParameterMap());
+//		QueryWrapper<SysCategory> queryWrapper = QueryGenerator.initQueryWrapper(sysCategory, req.getParameterMap());
+		QueryWrapper<SysCategory> queryWrapper = new QueryWrapper<>();
 		List<SysCategory> list = sysCategoryService.list(queryWrapper);
 		result.setSuccess(true);
 		result.setResult(list);
@@ -93,6 +98,7 @@ public class SysCategoryController {
 	 * @param sysCategory
 	 * @return
 	 */
+	@ApiOperation("添加产品")
 	@PostMapping(value = "/add")
 	public Result<SysCategory> add(@RequestBody SysCategory sysCategory) {
 		Result<SysCategory> result = new Result<SysCategory>();
@@ -111,6 +117,7 @@ public class SysCategoryController {
 	 * @param sysCategory
 	 * @return
 	 */
+	@ApiOperation("编辑更新产品")
 	@PutMapping(value = "/edit")
 	public Result<SysCategory> edit(@RequestBody SysCategory sysCategory) {
 		Result<SysCategory> result = new Result<SysCategory>();
@@ -129,6 +136,7 @@ public class SysCategoryController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation("通过id删除产品")
 	@DeleteMapping(value = "/delete")
 	public Result<SysCategory> delete(@RequestParam(name="id",required=true) String id) {
 		Result<SysCategory> result = new Result<SysCategory>();
@@ -148,6 +156,7 @@ public class SysCategoryController {
 	 * @param ids
 	 * @return
 	 */
+	@ApiOperation("批量删除产品")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<SysCategory> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		Result<SysCategory> result = new Result<SysCategory>();
@@ -165,6 +174,7 @@ public class SysCategoryController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation("通过id查询产品")
 	@GetMapping(value = "/queryById")
 	public Result<SysCategory> queryById(@RequestParam(name="id",required=true) String id) {
 		Result<SysCategory> result = new Result<SysCategory>();
@@ -183,7 +193,8 @@ public class SysCategoryController {
    *
    * @param request
    */
-  @RequestMapping(value = "/exportXls")
+  @ApiOperation("查询全部产品并导出excel文件")
+  @GetMapping(value = "/exportXls")
   public ModelAndView exportXls(HttpServletRequest request, SysCategory sysCategory) {
       // Step.1 组装查询条件查询数据
       QueryWrapper<SysCategory> queryWrapper = QueryGenerator.initQueryWrapper(sysCategory, request.getParameterMap());
@@ -214,6 +225,7 @@ public class SysCategoryController {
    * @param response
    * @return
    */
+  @ApiOperation("通过excel文件导入产品")
   @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
   public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
       MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -264,6 +276,7 @@ public class SysCategoryController {
   /**
      * 加载单个数据 用于回显
    */
+    @ApiOperation("加载单个数据，判断字段field等于某个值val，用于回显")
     @RequestMapping(value = "/loadOne", method = RequestMethod.GET)
  	public Result<SysCategory> loadOne(@RequestParam(name="field") String field,@RequestParam(name="val") String val) {
  		Result<SysCategory> result = new Result<SysCategory>();
@@ -293,6 +306,7 @@ public class SysCategoryController {
     /**
           * 加载节点的子数据
      */
+	@ApiOperation("加载某个节点的子数据")
     @RequestMapping(value = "/loadTreeChildren", method = RequestMethod.GET)
 	public Result<List<TreeSelectModel>> loadTreeChildren(@RequestParam(name="pid") String pid) {
 		Result<List<TreeSelectModel>> result = new Result<List<TreeSelectModel>>();
@@ -311,6 +325,7 @@ public class SysCategoryController {
     /**
          * 加载一级节点/如果是同步 则所有数据
      */
+	@ApiOperation("加载一级节点，如果同步，则加载所有数据")
     @RequestMapping(value = "/loadTreeRoot", method = RequestMethod.GET)
    	public Result<List<TreeSelectModel>> loadTreeRoot(@RequestParam(name="async") Boolean async,@RequestParam(name="pcode") String pcode) {
    		Result<List<TreeSelectModel>> result = new Result<List<TreeSelectModel>>();
@@ -348,6 +363,7 @@ public class SysCategoryController {
 	  * @param code
 	  * @return
 	  */
+	 @ApiOperation("校验编码code是否规范")
 	 @GetMapping(value = "/checkCode")
 	 public Result<?> checkCode(@RequestParam(name="pid",required = false) String pid,@RequestParam(name="code",required = false) String code) {
 		if(oConvertUtils.isEmpty(code)){
@@ -373,6 +389,7 @@ public class SysCategoryController {
 	  * @param condition
 	  * @return
 	  */
+	 @ApiOperation("分类字典树控件——加载节点")
 	 @RequestMapping(value = "/loadTreeData", method = RequestMethod.GET)
 	 public Result<List<TreeSelectModel>> loadDict(@RequestParam(name="pid",required = false) String pid,@RequestParam(name="pcode",required = false) String pcode, @RequestParam(name="condition",required = false) String condition) {
 		 Result<List<TreeSelectModel>> result = new Result<List<TreeSelectModel>>();
@@ -411,6 +428,7 @@ public class SysCategoryController {
 	  * @param ids
 	  * @return
 	  */
+	 @ApiOperation("分类字典控件数据回显[表单页面]")
 	 @RequestMapping(value = "/loadDictItem", method = RequestMethod.GET)
 	 public Result<List<String>> loadDictItem(@RequestParam(name = "ids") String ids) {
 		 Result<List<String>> result = new Result<>();
@@ -437,6 +455,7 @@ public class SysCategoryController {
 	  * @param code
 	  * @return
 	  */
+	 @ApiOperation("[列表页面]加载分类字典数据 用于值的替换")
 	 @RequestMapping(value = "/loadAllData", method = RequestMethod.GET)
 	 public Result<List<DictModel>> loadAllData(@RequestParam(name="code",required = true) String code) {
 		 Result<List<DictModel>> result = new Result<List<DictModel>>();
@@ -464,6 +483,7 @@ public class SysCategoryController {
 	  * @param parentIds
 	  * @return
 	  */
+	 @ApiOperation("根据父级id批量查询子节点")
 	 @GetMapping("/getChildListBatch")
 	 public Result getChildListBatch(@RequestParam("parentIds") String parentIds) {
 		 try {

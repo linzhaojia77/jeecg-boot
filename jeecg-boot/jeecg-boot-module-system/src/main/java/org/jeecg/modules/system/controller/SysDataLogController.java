@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.query.QueryGenerator;
 import org.jeecg.common.util.oConvertUtils;
@@ -21,14 +23,14 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import lombok.extern.slf4j.Slf4j;
-
+@Api(tags="查看数据版本修改")
 @RestController
 @RequestMapping("/sys/dataLog")
 @Slf4j
 public class SysDataLogController {
 	@Autowired
 	private ISysDataLogService service;
-	
+	@ApiOperation("查看版本列表")
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public Result<IPage<SysDataLog>> queryPageList(SysDataLog dataLog,@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 									  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,HttpServletRequest req) {
@@ -50,6 +52,7 @@ public class SysDataLogController {
 	 * @param req
 	 * @return
 	 */
+	@ApiOperation("通过两个id找到其对应修改数据进行对比")
 	@RequestMapping(value = "/queryCompareList", method = RequestMethod.GET)
 	public Result<List<SysDataLog>> queryCompareList(HttpServletRequest req) {
 		Result<List<SysDataLog>> result = new Result<>();
@@ -73,6 +76,7 @@ public class SysDataLogController {
 	 * @param req
 	 * @return
 	 */
+	@ApiOperation("根据dataTable和dataId找到对应版本")
 	@RequestMapping(value = "/queryDataVerList", method = RequestMethod.GET)
 	public Result<List<SysDataLog>> queryDataVerList(HttpServletRequest req) {
 		Result<List<SysDataLog>> result = new Result<>();

@@ -466,6 +466,7 @@ public class SysPermissionController {
 	 * @param jsonArray
 	 * @param allList
 	 */
+
 	private void getAllAuthJsonArray(JSONArray jsonArray,List<SysPermission> allList) {
 		JSONObject json = null;
 		for (SysPermission permission : allList) {

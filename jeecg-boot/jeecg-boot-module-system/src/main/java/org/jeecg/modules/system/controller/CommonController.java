@@ -2,6 +2,8 @@ package org.jeecg.modules.system.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
@@ -37,6 +39,7 @@ import java.net.URLDecoder;
  * @since 2018-12-20
  */
 @Slf4j
+@Api(tags="前端控制器")
 @RestController
 @RequestMapping("/sys/common")
 public class CommonController {
@@ -57,6 +60,7 @@ public class CommonController {
      * @Author 政辉
      * @return
      */
+    @ApiOperation("没权限提示")
     @GetMapping("/403")
     public Result<?> noauth()  {
         return Result.error("没有权限，请联系管理员授权");
@@ -68,6 +72,7 @@ public class CommonController {
      * @param response
      * @return
      */
+    @ApiOperation("文件上传")
     @PostMapping(value = "/upload")
     public Result<?> upload(HttpServletRequest request, HttpServletResponse response) {
         Result<?> result = new Result<>();
@@ -200,6 +205,7 @@ public class CommonController {
      * @param request
      * @param response
      */
+    @ApiOperation("预览文件")
     @GetMapping(value = "/static/**")
     public void view(HttpServletRequest request, HttpServletResponse response) {
         // ISO-8859-1 ==> UTF-8 进行编码转换
@@ -221,8 +227,8 @@ public class CommonController {
                 response.setStatus(404);
                 throw new RuntimeException("文件["+imgPath+"]不存在..");
             }
-            response.setContentType("application/force-download");// 设置强制下载不打开
-            response.addHeader("Content-Disposition", "attachment;fileName=" + new String(file.getName().getBytes("UTF-8"),"iso-8859-1"));
+//            response.setContentType("application/force-download");// 设置强制下载不打开
+            response.addHeader("Content-Disposition", "inline;fileName=" + new String(file.getName().getBytes("UTF-8"),"iso-8859-1"));
             inputStream = new BufferedInputStream(new FileInputStream(filePath));
             outputStream = response.getOutputStream();
             byte[] buf = new byte[1024];
@@ -262,55 +268,56 @@ public class CommonController {
 //	 * @param response
 //	 * @throws Exception
 //	 */
-//	@GetMapping(value = "/download/**")
-//	public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
-//		// ISO-8859-1 ==> UTF-8 进行编码转换
-//		String filePath = extractPathFromPattern(request);
-//		// 其余处理略
-//		InputStream inputStream = null;
-//		OutputStream outputStream = null;
-//		try {
-//			filePath = filePath.replace("..", "");
-//			if (filePath.endsWith(",")) {
-//				filePath = filePath.substring(0, filePath.length() - 1);
-//			}
-//			String localPath = uploadpath;
-//			String downloadFilePath = localPath + File.separator + filePath;
-//			File file = new File(downloadFilePath);
-//	         if (file.exists()) {
-//	         	response.setContentType("application/force-download");// 设置强制下载不打开            
-//	 			response.addHeader("Content-Disposition", "attachment;fileName=" + new String(file.getName().getBytes("UTF-8"),"iso-8859-1"));
-//	 			inputStream = new BufferedInputStream(new FileInputStream(file));
-//	 			outputStream = response.getOutputStream();
-//	 			byte[] buf = new byte[1024];
-//	 			int len;
-//	 			while ((len = inputStream.read(buf)) > 0) {
-//	 				outputStream.write(buf, 0, len);
-//	 			}
-//	 			response.flushBuffer();
-//	         }
-//
-//		} catch (Exception e) {
-//			log.info("文件下载失败" + e.getMessage());
-//			// e.printStackTrace();
-//		} finally {
-//			if (inputStream != null) {
-//				try {
-//					inputStream.close();
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//			if (outputStream != null) {
-//				try {
-//					outputStream.close();
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//
-//	}
+    @ApiOperation("下载文件")
+	@GetMapping(value = "/download/**")
+	public void download(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// ISO-8859-1 ==> UTF-8 进行编码转换
+		String filePath = extractPathFromPattern(request);
+		// 其余处理略
+		InputStream inputStream = null;
+		OutputStream outputStream = null;
+		try {
+			filePath = filePath.replace("..", "");
+			if (filePath.endsWith(",")) {
+				filePath = filePath.substring(0, filePath.length() - 1);
+			}
+			String localPath = uploadpath;
+			String downloadFilePath = localPath + File.separator + filePath;
+			File file = new File(downloadFilePath);
+	         if (file.exists()) {
+	         	response.setContentType("application/force-download");// 设置强制下载不打开            
+	 			response.addHeader("Content-Disposition", "attachment;fileName=" + new String(file.getName().getBytes("UTF-8"),"iso-8859-1"));
+	 			inputStream = new BufferedInputStream(new FileInputStream(file));
+	 			outputStream = response.getOutputStream();
+	 			byte[] buf = new byte[1024];
+	 			int len;
+	 			while ((len = inputStream.read(buf)) > 0) {
+	 				outputStream.write(buf, 0, len);
+	 			}
+	 			response.flushBuffer();
+	         }
+
+		} catch (Exception e) {
+			log.info("文件下载失败" + e.getMessage());
+			// e.printStackTrace();
+		} finally {
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if (outputStream != null) {
+				try {
+					outputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+	}
 
     /**
      * @功能：pdf预览Iframe

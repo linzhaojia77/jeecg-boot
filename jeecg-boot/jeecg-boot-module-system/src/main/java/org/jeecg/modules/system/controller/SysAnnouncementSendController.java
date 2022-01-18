@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.constant.CommonConstant;
@@ -42,6 +44,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping("/sys/sysAnnouncementSend")
 @Slf4j
+@Api(tags="我的信息")
 public class SysAnnouncementSendController {
 	@Autowired
 	private ISysAnnouncementSendService sysAnnouncementSendService;
@@ -55,6 +58,7 @@ public class SysAnnouncementSendController {
 	 * @return
 	 */
 	@GetMapping(value = "/list")
+	@ApiOperation("查看所有人的消息")
 	public Result<IPage<SysAnnouncementSend>> queryPageList(SysAnnouncementSend sysAnnouncementSend,
 									  @RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
 									  @RequestParam(name="pageSize", defaultValue="10") Integer pageSize,
@@ -87,6 +91,7 @@ public class SysAnnouncementSendController {
 	 * @param sysAnnouncementSend
 	 * @return
 	 */
+	@ApiOperation("添加我的信息")
 	@PostMapping(value = "/add")
 	public Result<SysAnnouncementSend> add(@RequestBody SysAnnouncementSend sysAnnouncementSend) {
 		Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();
@@ -105,6 +110,7 @@ public class SysAnnouncementSendController {
 	 * @param sysAnnouncementSend
 	 * @return
 	 */
+	@ApiOperation("编辑更新我的信息")
 	@PutMapping(value = "/edit")
 	public Result<SysAnnouncementSend> eidt(@RequestBody SysAnnouncementSend sysAnnouncementSend) {
 		Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();
@@ -127,6 +133,7 @@ public class SysAnnouncementSendController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation("通过id删除我的信息")
 	@DeleteMapping(value = "/delete")
 	public Result<SysAnnouncementSend> delete(@RequestParam(name="id",required=true) String id) {
 		Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();
@@ -148,6 +155,7 @@ public class SysAnnouncementSendController {
 	 * @param ids
 	 * @return
 	 */
+	@ApiOperation("批量删除我的信息")
 	@DeleteMapping(value = "/deleteBatch")
 	public Result<SysAnnouncementSend> deleteBatch(@RequestParam(name="ids",required=true) String ids) {
 		Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();
@@ -165,6 +173,7 @@ public class SysAnnouncementSendController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation("通过id查找我的信息")
 	@GetMapping(value = "/queryById")
 	public Result<SysAnnouncementSend> queryById(@RequestParam(name="id",required=true) String id) {
 		Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();
@@ -203,6 +212,7 @@ public class SysAnnouncementSendController {
 	 * @功能：获取我的消息
 	 * @return
 	 */
+	@ApiOperation("获取我的信息")
 	@GetMapping(value = "/getMyAnnouncementSend")
 	public Result<IPage<AnnouncementSendModel>> getMyAnnouncementSend(AnnouncementSendModel announcementSendModel,
 			@RequestParam(name="pageNo", defaultValue="1") Integer pageNo,
@@ -224,6 +234,7 @@ public class SysAnnouncementSendController {
 	 * @功能：一键已读
 	 * @return
 	 */
+	@ApiOperation("一键已读")
 	@PutMapping(value = "/readAll")
 	public Result<SysAnnouncementSend> readAll() {
 		Result<SysAnnouncementSend> result = new Result<SysAnnouncementSend>();

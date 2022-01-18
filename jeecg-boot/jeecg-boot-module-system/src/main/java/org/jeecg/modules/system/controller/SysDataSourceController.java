@@ -83,6 +83,7 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
     }
 
     @GetMapping(value = "/options")
+    @ApiOperation("查看数据源简要信息")
     public Result<?> queryOptions(SysDataSource sysDataSource, HttpServletRequest req) {
         QueryWrapper<SysDataSource> queryWrapper = QueryGenerator.initQueryWrapper(sysDataSource, req.getParameterMap());
         List<SysDataSource> pageList = sysDataSourceService.list(queryWrapper);
@@ -200,6 +201,7 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
      * @param request
      * @param sysDataSource
      */
+    @ApiOperation("导出excel")
     @RequestMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, SysDataSource sysDataSource) {
         return super.exportXls(request, sysDataSource, SysDataSource.class, "多数据源管理");
@@ -212,6 +214,7 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
      * @param response
      * @return
      */
+    @ApiOperation("通过excel导入数据源数据")
     @RequestMapping(value = "/importExcel", method = RequestMethod.POST)
     public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
         return super.importExcel(request, response, SysDataSource.class);
