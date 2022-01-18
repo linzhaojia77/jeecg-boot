@@ -320,7 +320,7 @@ public class SysDepartController {
      * @param request
      */
 	@ApiOperation("导出excel")
-    @RequestMapping(value = "/exportXls")
+    @GetMapping(value = "/exportXls")
     public ModelAndView exportXls(SysDepart sysDepart,HttpServletRequest request) {
         // Step.1 组装查询条件
         QueryWrapper<SysDepart> queryWrapper = QueryGenerator.initQueryWrapper(sysDepart, request.getParameterMap());

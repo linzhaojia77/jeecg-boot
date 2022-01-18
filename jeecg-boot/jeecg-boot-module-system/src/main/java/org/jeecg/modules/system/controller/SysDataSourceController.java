@@ -202,7 +202,7 @@ public class SysDataSourceController extends JeecgController<SysDataSource, ISys
      * @param sysDataSource
      */
     @ApiOperation("导出excel")
-    @RequestMapping(value = "/exportXls")
+    @GetMapping(value = "/exportXls")
     public ModelAndView exportXls(HttpServletRequest request, SysDataSource sysDataSource) {
         return super.exportXls(request, sysDataSource, SysDataSource.class, "多数据源管理");
     }
