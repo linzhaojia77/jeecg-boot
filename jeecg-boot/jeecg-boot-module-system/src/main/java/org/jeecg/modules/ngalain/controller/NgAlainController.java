@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.system.vo.DictModel;
@@ -13,11 +15,7 @@ import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.modules.ngalain.service.NgAlainService;
 import org.jeecg.modules.system.service.ISysDictService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -25,14 +23,15 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
+@Api(tags="ng-alain接口")
 @RequestMapping("/sys/ng-alain")
 public class NgAlainController {
     @Autowired
     private NgAlainService ngAlainService;
     @Autowired
     private ISysDictService sysDictService;
-
-    @RequestMapping(value = "/getAppData")
+    @ApiOperation("获取ng-alain数据信息")
+    @GetMapping(value = "/getAppData")
     @ResponseBody
     public JSONObject getAppData(HttpServletRequest request) throws Exception {
        String token=request.getHeader("X-Access-Token");
@@ -51,7 +50,7 @@ public class NgAlainController {
         j.put("app", app);
         return j;
     }
-
+    @ApiOperation("根据字典类型查看字典数据")
     @RequestMapping(value = "/getDictItems/{dictCode}", method = RequestMethod.GET)
     public Object getDictItems(@PathVariable String dictCode) {
         log.info(" dictCode : "+ dictCode);
@@ -79,6 +78,7 @@ public class NgAlainController {
         }
         return dictlist;
     }
+    @ApiOperation("根据路径的table、key、value查询table表里的key、value字段数据")
     @RequestMapping(value = "/getDictItemsByTable/{table}/{key}/{value}", method = RequestMethod.GET)
     public Object getDictItemsByTable(@PathVariable String table,@PathVariable String key,@PathVariable String value) {
         return this.ngAlainService.getDictByTable(table,key,value);

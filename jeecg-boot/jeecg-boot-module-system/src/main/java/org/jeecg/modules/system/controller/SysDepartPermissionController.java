@@ -148,7 +148,8 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	* @param request
 	* @param sysDepartPermission
 	*/
-	@RequestMapping(value = "/exportXls")
+	@ApiOperation("导出excel表")
+	@GetMapping(value = "/exportXls")
 	public ModelAndView exportXls(HttpServletRequest request, SysDepartPermission sysDepartPermission) {
 	  return super.exportXls(request, sysDepartPermission, SysDepartPermission.class, "部门权限表");
 	}
@@ -160,6 +161,7 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	* @param response
 	* @return
 	*/
+	@ApiOperation("通过excel导入权限数据")
 	@RequestMapping(value = "/importExcel", method = RequestMethod.POST)
 	public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) {
 	  return super.importExcel(request, response, SysDepartPermission.class);
@@ -168,6 +170,7 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	/**
 	* 部门管理授权查询数据规则数据
 	*/
+	@ApiOperation("根据permissionid和departId查询权限数据")
 	@GetMapping(value = "/datarule/{permissionId}/{departId}")
 	public Result<?> loadDatarule(@PathVariable("permissionId") String permissionId,@PathVariable("departId") String departId) {
 		List<SysPermissionDataRule> list = sysPermissionDataRuleService.getPermRuleListByPermId(permissionId);
@@ -196,6 +199,7 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	/**
 	* 保存数据规则至部门菜单关联表
 	*/
+	@ApiOperation("保存权限表数据")
 	@PostMapping(value = "/datarule")
 	public Result<?> saveDatarule(@RequestBody JSONObject jsonObject) {
 		try {
@@ -225,6 +229,7 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	  *
 	  * @return
 	  */
+	 @ApiOperation("查询角色授权")
 	 @RequestMapping(value = "/queryDeptRolePermission", method = RequestMethod.GET)
 	 public Result<List<String>> queryDeptRolePermission(@RequestParam(name = "roleId", required = true) String roleId) {
 		 Result<List<String>> result = new Result<>();
@@ -243,6 +248,7 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	  *
 	  * @return
 	  */
+	 @ApiOperation("保存角色授权")
 	 @RequestMapping(value = "/saveDeptRolePermission", method = RequestMethod.POST)
 	 public Result<String> saveDeptRolePermission(@RequestBody JSONObject json) {
 		 long start = System.currentTimeMillis();
@@ -266,6 +272,7 @@ public class SysDepartPermissionController extends JeecgController<SysDepartPerm
 	  * @param request
 	  * @return
 	  */
+	 @ApiOperation("查询菜单权限树")
 	 @RequestMapping(value = "/queryTreeListForDeptRole", method = RequestMethod.GET)
 	 public Result<Map<String,Object>> queryTreeListForDeptRole(@RequestParam(name="departId",required=true) String departId,HttpServletRequest request) {
 		 Result<Map<String,Object>> result = new Result<>();

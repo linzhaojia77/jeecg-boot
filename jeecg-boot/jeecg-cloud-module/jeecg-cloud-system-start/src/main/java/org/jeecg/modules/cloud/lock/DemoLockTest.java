@@ -47,7 +47,7 @@ public class DemoLockTest {
     /**
      * 测试分布式锁【编码方式】
      */
-    //@Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "0/2 * * * * ?")
     public void execute2() throws InterruptedException {
         if (redissonLock.tryLock(CloudConstant.REDISSON_DEMO_LOCK_KEY2, -1, 6000)) {
             log.info("执行任务execute2开始，休眠十秒");

@@ -1,26 +1,33 @@
 package org.jeecg.modules.demo.test;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * @Description: TODO
  * @author: lzj
- * @date: 2022年01月07日 15:56
+ * @date: 2022年01月24日 09:56
  */
 public class MuSe {
     public static void main(String[] args) {
         MuSe myself = new MuSe();
+        int sum = 0;
+        int cpsum = 0;
+        int l;
+        for(l=0;l<1000;l++){
         int ping =0;
+        int cpping=0;
         int ying = 0;
+        int cpying = 0;
         int shu = 0;
+        int cpshu = 0;
         int yuanjifen = 0;
+        int cpyuanjifen =0;
         //设置庄家本金
         int jifen = 0;
+        int cpjifen = 0;
         //设置游戏场数
-        int NN = 100;
+        int NN = 1000;
         for (int tt = 0;tt<NN;tt++){
         //扑克牌
         ArrayList<String> pukepai = new ArrayList<>();
@@ -38,6 +45,11 @@ public class MuSe {
             ArrayList<ArrayList<String>> dugous = myself.setpeople(5);
             //洗牌
             Collections.shuffle(pukepai);
+            //复制一副牌
+            ArrayList<String> cppukepai = new ArrayList<>();
+            for(String str : pukepai){
+                cppukepai.add(str);
+            }
         //发牌
         int index = 0;
         for (int f = 0; f < 2; f++) {
@@ -53,8 +65,19 @@ public class MuSe {
 //                System.out.println(dugous.get(k).get(p)+" ");
 //            }
 //        }
+        //复制各玩家手牌，以便做出第二种逻辑的判断且保证是处于同一把所形成的不同结局
+            ArrayList<ArrayList<String>> cpdugous = myself.setpeople(5);
+        int cpindex = 0;
+        for (int f = 0; f < 2; f++) {
+            for (int p = 0; p < cpdugous.size(); p++) {
+                cpdugous.get(p).add(cppukepai.get(cpindex));
+                cpindex++;
+            }
+        }
 
-        //判断补牌逻辑：1、携带1补；2、小于等于5补；3、6、7点的两张牌有机会补成4倍（顺子）、5倍（同数）、6倍（同花顺）补
+
+//            Collections.copy(cppukepai,pukepai);
+            //判断补牌逻辑：1、携带1补；2、小于等于5补；3、6、7点的两张牌有机会补成4倍（顺子）、5倍（同数）、6倍（同花顺）补
         for (int b = 0; b < dugous.size(); b++) {
             if (dugous.get(b).get(0).substring(dugous.get(b).get(0).length() - 1, dugous.get(b).get(0).length()).equals("1") ||
                     dugous.get(b).get(1).substring(dugous.get(b).get(1).length() - 1, dugous.get(b).get(1).length()).equals("1")) {
@@ -75,6 +98,41 @@ public class MuSe {
                 continue;
             }
         }
+        //庄家二补牌
+            for (int b = 0; b < cpdugous.size(); b++) {
+                if(b==0){
+                    if (cpdugous.get(b).get(0).substring(cpdugous.get(b).get(0).length() - 1, cpdugous.get(b).get(0).length()).equals("1") ||
+                            cpdugous.get(b).get(1).substring(cpdugous.get(b).get(1).length() - 1, cpdugous.get(b).get(1).length()).equals("1")) {
+                        cpdugous.get(b).add(cppukepai.get(cpindex));
+                        cpindex++;
+                        continue;
+                    }else if ((myself.huansuan(cpdugous.get(b).get(0).substring(2, cpdugous.get(b).get(0).length())) +
+                            myself.huansuan(cpdugous.get(b).get(1).substring(2, cpdugous.get(b).get(1).length()))) % 10 <= 5) {
+                        cpdugous.get(b).add(cppukepai.get(cpindex));
+                        cpindex++;
+                        continue;
+                    }
+
+                }else {
+                if (cpdugous.get(b).get(0).substring(cpdugous.get(b).get(0).length() - 1, cpdugous.get(b).get(0).length()).equals("1") ||
+                        cpdugous.get(b).get(1).substring(cpdugous.get(b).get(1).length() - 1, cpdugous.get(b).get(1).length()).equals("1")) {
+                    cpdugous.get(b).add(cppukepai.get(cpindex));
+                    cpindex++;
+                    continue;
+                } else if ((myself.huansuan(cpdugous.get(b).get(0).substring(2, cpdugous.get(b).get(0).length())) +
+                        myself.huansuan(cpdugous.get(b).get(1).substring(2, cpdugous.get(b).get(1).length()))) % 10 <= 5) {
+                    cpdugous.get(b).add(cppukepai.get(cpindex));
+                    cpindex++;
+                    continue;
+                } else if (((myself.huansuan(cpdugous.get(b).get(0).substring(2, cpdugous.get(b).get(0).length())) +
+                        myself.huansuan(cpdugous.get(b).get(1).substring(2, cpdugous.get(b).get(1).length()))) % 10 == 6 || (myself.huansuan(cpdugous.get(b).get(0).substring(2, cpdugous.get(b).get(0).length())) +
+                        myself.huansuan(cpdugous.get(b).get(1).substring(2, cpdugous.get(b).get(1).length()))) % 10 == 7) && (Math.abs(Integer.parseInt(cpdugous.get(b).get(0).substring(2, cpdugous.get(b).get(0).length())) -
+                        Integer.parseInt(cpdugous.get(b).get(1).substring(2, cpdugous.get(b).get(1).length()))) <= 2)) {
+                    cpdugous.get(b).add(cppukepai.get(cpindex));
+                    cpindex++;
+                    continue;
+                }}
+            }
         //显示手牌
 //        for(int kk=0;kk<dugous.size();kk++){
 //            System.out.print("玩家"+kk+"的牌有:");
@@ -82,6 +140,12 @@ public class MuSe {
 //                System.out.println(dugous.get(kk).get(p)+" ");
 //            }
 //        }
+//            for(int kk=0;kk<cpdugous.size();kk++){
+//                System.out.print("玩家"+kk+"的牌有:");
+//                for(int p=0;p<cpdugous.get(kk).size();p++){
+//                    System.out.println(cpdugous.get(kk).get(p)+" ");
+//                }
+//            }
         //赌博N论之后庄家的积分，原始积分为0
 
         for (int xx = 1; xx < dugous.size(); xx++) {
@@ -92,16 +156,14 @@ public class MuSe {
                     int ttt=tt+1;
                     if(jifen>yuanjifen){
                         ying++;
-                    }
-                    else if(jifen<yuanjifen){
+                    }else if(jifen<yuanjifen){
                         shu++;
                     }else ping++;
                     yuanjifen = jifen;
-                    System.out.println("第"+ttt+"把后你的余额为"+jifen);
+                    System.out.println("第"+ttt+"把后庄家一的余额为"+jifen);
                 }
                 continue;
             }
-            ;
             int fu = myself.pk(dugous.get(xx), dugous.get(0));
             if (fu > 0) {
                 jifen = jifen - fu;
@@ -109,31 +171,85 @@ public class MuSe {
                     int ttt=tt+1;
                     if(jifen>yuanjifen){
                         ying++;
-                    }
-                    else if(jifen<yuanjifen){
+                    }else if(jifen<yuanjifen){
                         shu++;
                     }else ping++;
                     yuanjifen = jifen;
-                    System.out.println("第"+ttt+"把后你的余额为"+jifen);
+                    System.out.println("第"+ttt+"把后庄家一的余额为"+jifen);
                 }
                 continue;
             }
-            if(xx == 4){
-                int ttt=tt+1;
-                if(jifen>yuanjifen){
-                    ying++;
+            if(zheng ==0&&fu==0) {
+                if (xx == 4) {
+                    int ttt = tt + 1;
+                    if(jifen>yuanjifen){
+                        ying++;
+                    }else if(jifen<yuanjifen){
+                        shu++;
+                    }else ping++;
+                    yuanjifen = jifen;
+                    System.out.println("第" + ttt + "把后庄家一的余额为" + jifen);
                 }
-                else if(jifen<yuanjifen){
-                    shu++;
-                }else ping++;
-                yuanjifen = jifen;
-                System.out.println("第"+ttt+"把后你的余额为"+jifen);
+                continue;
             }
         }
+            for (int xx = 1; xx < cpdugous.size(); xx++) {
+                int zheng = myself.pk(cpdugous.get(0), cpdugous.get(xx));
+                if (zheng > 0) {
+                    cpjifen = cpjifen + zheng;
+                    if (xx == 4) {
+                        int cpttt = tt + 1;
+                        if (cpjifen > cpyuanjifen) {
+                            cpying++;
+                        }else if(cpjifen < cpyuanjifen){
+                            cpshu++;
+                        }else cpping++;
+                        cpyuanjifen = cpjifen;
+                        System.out.println("第" + cpttt + "把后庄家二的余额为" + cpjifen);
+                    }
+                }
+                ;
+                int fu = myself.pk(cpdugous.get(xx), cpdugous.get(0));
+                if (fu > 0) {
+                    cpjifen = cpjifen - fu;
+                    if (xx == 4) {
+                        int cpttt = tt + 1;
+                        if (cpjifen > cpyuanjifen) {
+                            cpying++;
+                        }else if(cpjifen < cpyuanjifen){
+                            cpshu++;
+                        }else cpping++;
+                        cpyuanjifen = cpjifen;
+                        System.out.println("第" + cpttt + "把后庄家二的余额为" + cpjifen);
+                    }
+                }
+                if (zheng == 0 && fu == 0) {
+                    if (xx == 4) {
+                        int cpttt = tt + 1;
+                        if (cpjifen > cpyuanjifen) {
+                            cpying++;
+                        }else if(cpjifen < cpyuanjifen){
+                            cpshu++;
+                        }else cpping++;
+                        cpyuanjifen = cpjifen;
+                        System.out.println("第" + cpttt + "把后庄家二的余额为" + cpjifen);
+                    }
+                }
+            }
     }
-        System.out.println("在这"+NN+"把赌博中，你赢的次数是"+ying+"次，"+"输的次数是"+shu+"次，"+"平局的次数是"+ping+"次；");
-        System.out.println("本金为0且作为庄家的你，打了"+NN+"把后，你的余额为："+jifen);
+        System.out.println("游戏补牌逻辑说明：你为庄家，韭菜们的补牌逻辑是有1必补，低于等于5点必补，6、7点有概率补成4倍及以上必补");
+        System.out.println("庄家1的补牌逻辑与韭菜一致；在这"+NN+"把赌博中，赢的次数是"+ying+"次，"+"输的次数是"+shu+"次，"+"平局的次数是"+ping+"次；");
+        System.out.println("打了"+NN+"把后，庄家1的余额为："+jifen);
+        System.out.println();
+        System.out.println("在这"+NN+"把中，如果换成庄家2的补牌逻辑：");
+        System.out.println("庄家2的补牌逻辑是有1必补，低于等于5点补，6、7点任何情况下都不补；在这"+NN+"把赌博中，赢的次数是"+cpying+"次，"+"输的次数是"+cpshu+"次，"+"平局的次数是"+cpping+"次；");
+        System.out.println("打了"+NN+"把后，庄家2的余额为："+cpjifen);
+        sum+=Math.abs(jifen);
+        cpsum+=Math.abs(cpjifen);
 //
+    }
+        System.out.println("庄家1每次循环输赢的平均值为："+sum/l+";");
+        System.out.println("庄家2每次循环输赢的平均值为："+cpsum/l+";");
     }
 
     //设置玩家人数,初始化玩家手牌

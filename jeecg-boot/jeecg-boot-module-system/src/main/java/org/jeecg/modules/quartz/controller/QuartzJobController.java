@@ -88,6 +88,7 @@ public class QuartzJobController {
 	 * @return
 	 */
 	//@RequiresRoles("admin")
+	@ApiOperation(value = "添加定时任务")
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public Result<?> add(@RequestBody QuartzJob quartzJob) {
 		List<QuartzJob> list = quartzJobService.findByJobClassName(quartzJob.getJobClassName());
@@ -105,6 +106,7 @@ public class QuartzJobController {
 	 * @return
 	 */
 	//@RequiresRoles("admin")
+	@ApiOperation(value = "编辑更新定时任务")
 	@RequestMapping(value = "/edit", method = RequestMethod.PUT)
 	public Result<?> eidt(@RequestBody QuartzJob quartzJob) {
 		try {
@@ -123,6 +125,7 @@ public class QuartzJobController {
 	 * @return
 	 */
 	//@RequiresRoles("admin")
+	@ApiOperation(value = "根据id删除定时任务")
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
 	public Result<?> delete(@RequestParam(name = "id", required = true) String id) {
 		QuartzJob quartzJob = quartzJobService.getById(id);
@@ -141,6 +144,7 @@ public class QuartzJobController {
 	 * @return
 	 */
 	//@RequiresRoles("admin")
+	@ApiOperation(value = "批量删除定时任务")
 	@RequestMapping(value = "/deleteBatch", method = RequestMethod.DELETE)
 	public Result<?> deleteBatch(@RequestParam(name = "ids", required = true) String ids) {
 		if (ids == null || "".equals(ids.trim())) {
@@ -180,7 +184,7 @@ public class QuartzJobController {
 	 */
 	//@RequiresRoles("admin")
 	@GetMapping(value = "/resume")
-	@ApiOperation(value = "恢复定时任务")
+	@ApiOperation(value = "指定类名恢复定时任务")
 	public Result<Object> resumeJob(@RequestParam(name = "jobClassName", required = true) String jobClassName) {
 		QuartzJob job = quartzJobService.getOne(new LambdaQueryWrapper<QuartzJob>().eq(QuartzJob::getJobClassName, jobClassName));
 		if (job == null) {
@@ -197,6 +201,7 @@ public class QuartzJobController {
 	 * @param id
 	 * @return
 	 */
+	@ApiOperation("通过id查询任务")
 	@RequestMapping(value = "/queryById", method = RequestMethod.GET)
 	public Result<?> queryById(@RequestParam(name = "id", required = true) String id) {
 		QuartzJob quartzJob = quartzJobService.getById(id);
@@ -209,7 +214,8 @@ public class QuartzJobController {
 	 * @param request
 	 * @param quartzJob
 	 */
-	@RequestMapping(value = "/exportXls")
+	@ApiOperation("导出excel任务表")
+	@GetMapping(value = "/exportXls")
 	public ModelAndView exportXls(HttpServletRequest request, QuartzJob quartzJob) {
 		// Step.1 组装查询条件
 		QueryWrapper<QuartzJob> queryWrapper = QueryGenerator.initQueryWrapper(quartzJob, request.getParameterMap());
@@ -231,6 +237,7 @@ public class QuartzJobController {
 	 * @param response
 	 * @return
 	 */
+	@ApiOperation("通过excel表导入任务数据")
 	@RequestMapping(value = "/importExcel", method = RequestMethod.POST)
 	public Result<?> importExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
@@ -269,6 +276,7 @@ public class QuartzJobController {
 	 * @return
 	 */
 	//@RequiresRoles("admin")
+	@ApiOperation("立即执行指定id的任务")
 	@GetMapping("/execute")
 	public Result<?> execute(@RequestParam(name = "id", required = true) String id) {
 		QuartzJob quartzJob = quartzJobService.getById(id);

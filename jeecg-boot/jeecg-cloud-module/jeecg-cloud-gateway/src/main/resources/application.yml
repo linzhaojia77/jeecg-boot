@@ -3,6 +3,9 @@ server:
 spring:
   application:
     name: jeecg-gateway
+  redis:
+    host: localhost
+    port: 6379
   cloud:
     gateway:
       discovery:
@@ -21,10 +24,33 @@ spring:
           uri: lb://jeecg-demo
           predicates:
             - Path=/mock/**,/test/**,/bigscreen/template1/**,/bigscreen/template2/**
+          filters:
+            # redis限流 ， filter名称必须是RequestRateLimiter
+            - name: RequestRateLimiter
+              args:
+                # 使用SpEL名称引用Bean，与上面新建的RateLimiterConfig类中的bean的name相同
+                key-resolver: '#{@ipKeyResolver}'
+                # 每秒最大访问次数
+                redis-rate-limiter.replenishRate: 10
+                # 令牌桶最大容量
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 2
         - id: jeecg-system
-          uri: lb://jeecg-system
+          uri: http://192.168.110.59:7001
           predicates:
             - Path=/sys/**,/eoa/**,/v1/**,/joa/**,/online/**,/bigscreen/**,/jmreport/**,/desform/**,/act/**,/plug-in/**,/generic/**
+          filters:
+            # redis限流 ， filter名称必须是RequestRateLimiter
+            - name: RequestRateLimiter
+              args:
+                # 使用SpEL名称引用Bean，与上面新建的RateLimiterConfig类中的bean的name相同
+                key-resolver: '#{@ipKeyResolver}'
+                # 每秒最大访问次数
+                redis-rate-limiter.replenishRate: 10
+                # 令牌桶最大容量
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 2
+
         - id: jeecg-system-websocket
           uri: lb:ws://jeecg-system
           predicates:
@@ -40,6 +66,7 @@ spring:
             name: default
             #转发地址
             fallbackUri: 'forward:/fallback'
+
         - name: Retry
           args:
             #重试次数，默认值是 3 次
@@ -48,6 +75,7 @@ spring:
             statuses: BAD_GATEWAY,BAD_REQUEST
             #指定哪些方法的请求需要进行重试逻辑，默认值是 GET 方法
             methods: GET,POST
+
 # hystrix 信号量隔离，3秒后自动超时
 hystrix:
   enabled: true

@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjectUtil;
 
 import org.apache.commons.beanutils.ConvertUtils;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * 自定义Map
  */
-public class BaseMap extends HashMap<String, Object> {
+public class BaseMap extends HashMap<String, Object> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

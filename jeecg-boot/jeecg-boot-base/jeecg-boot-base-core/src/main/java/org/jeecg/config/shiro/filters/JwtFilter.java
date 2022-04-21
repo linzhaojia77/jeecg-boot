@@ -54,7 +54,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader(CommonConstant.X_ACCESS_TOKEN);
-        token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDI1NzE5MjgsInVzZXJuYW1lIjoiamVlY2cifQ.FPY-2dKsZTTMhx37qj7Flgt5Xicke_C1bSn9ANb6_Ts";
+        token="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDUwNTkwNDYsInVzZXJuYW1lIjoiYWRtaW4ifQ.GyImudE4YKNa9z1b1ii0wqj4hn3AL6s23pVNqGyzxoA";
         // update-begin--Author:lvdandan Date:20210105 for：JT-355 OA聊天添加token验证，获取token参数
         if(token == null){
             token = httpServletRequest.getParameter("token");
